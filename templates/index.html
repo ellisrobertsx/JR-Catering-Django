@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if user.is_authenticated %}{{ user.username }} - {% endif %}Home - JR Catering
+{% endblock %}
+
+{% block head %}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+{% endblock %}
+
+{% block content %}
+<div class="hero-container">
+    <div class="hero-image">
+        <picture>
+            <source 
+                srcset="{% static 'assets/images/img1.webp' %}?v=1" 
+                type="image/webp">
+            <img 
+                src="{% static 'assets/images/img1.webp' %}?v=1" 
+                alt="Hero Image 1 - Showcasing our catering service"
+                width="900"
+                height="400"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high">
+        </picture>
+    </div>
+    <div class="hero-image">
+        <picture>
+            <source 
+                srcset="{% static 'assets/images/img2.webp' %}?v=1" 
+                type="image/webp">
+            <img 
+                src="{% static 'assets/images/img2.webp' %}?v=1" 
+                alt="Hero Image 2 - Featured dishes"
+                width="900"
+                height="400"
+                loading="lazy"
+                decoding="async">
+        </picture>
+    </div>
+    <div class="hero-image">
+        <picture>
+            <source 
+                srcset="{% static 'assets/images/img3.webp' %}?v=1" 
+                type="image/webp">
+            <img 
+                src="{% static 'assets/images/img3.webp' %}?v=1" 
+                alt="Hero Image 3 - Catering setup"
+                width="900"
+                height="400"
+                loading="lazy"
+                decoding="async">
+        </picture>
+    </div>
+    <div class="hero-image">
+        <picture>
+            <source 
+                srcset="{% static 'assets/images/img4.webp' %}?v=1" 
+                type="image/webp">
+            <img 
+                src="{% static 'assets/images/img4.webp' %}?v=1" 
+                alt="Hero Image 4 - Event catering"
+                width="900"
+                height="400"
+                loading="lazy"
+                decoding="async">
+        </picture>
+    </div>
+</div>
+
+<h1>Welcome to JR Catering{% if user.is_authenticated %}, {{ user.username }}{% endif %}</h1>
+<p>We are a catering company that specializes in providing high-quality food and service to our clients.</p>
+
+<section id="container">
+    <div class="card" role="button" tabindex="0" 
+         onclick="window.location.href='{% url 'food_menu' %}'" 
+         onkeypress="if(event.key==='Enter') window.location.href='{% url 'food_menu' %}'">
+        <picture>
+            <source 
+                srcset="{% static 'assets/images/food.webp' %}?v=1" 
+                type="image/webp">
+            <img 
+                src="{% static 'assets/images/food.webp' %}?v=1" 
+                alt="View our food menu - Various dishes available"
+                width="300"
+                height="200"
+                loading="lazy"
+                decoding="async">
+        </picture>
+        <div class="card-content">
+            <h2>Food Menu</h2>
+        </div>
+    </div>
+
+    <div class="card" role="button" tabindex="0" 
+         onclick="window.location.href='{% url 'drinks_menu' %}'" 
+         onkeypress="if(event.key==='Enter') window.location.href='{% url 'drinks_menu' %}'">
+        <picture>
+            <source 
+                srcset="{% static 'assets/images/drinks.webp' %}?v=1" 
+                type="image/webp">
+            <img 
+                src="{% static 'assets/images/drinks.webp' %}?v=1" 
+                alt="View our drinks menu - Selection of beverages"
+                width="300"
+                height="200"
+                loading="lazy"
+                decoding="async">
+        </picture>
+        <div class="card-content">
+            <h2>Drinks Menu</h2>
+        </div>
+    </div>
+
+    <div class="card" role="button" tabindex="0" 
+         onclick="window.location.href='{% if user.is_authenticated %}{% url 'book' %}{% else %}{% url 'login' %}{% endif %}'" 
+         onkeypress="if(event.key==='Enter') window.location.href='{% if user.is_authenticated %}{% url 'book' %}{% else %}{% url 'login' %}{% endif %}'">
+        <picture>
+            <source 
+                srcset="{% static 'assets/images/table.webp' %}?v=1" 
+                type="image/webp">
+            <img 
+                src="{% static 'assets/images/table.webp' %}?v=1" 
+                alt="Book a table - Make your reservation"
+                width="300"
+                height="200"
+                loading="lazy"
+                decoding="async">
+        </picture>
+        <div class="card-content">
+            <h2>{% if user.is_authenticated %}View Bookings{% else %}Book a Table{% endif %}</h2>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('.hero-image');
+    let current = 0;
+    if (images.length > 0) {
+        images.forEach((img, i) => img.style.display = i === 0 ? 'block' : 'none');
+        setInterval(() => {
+            images[current].style.display = 'none';
+            current = (current + 1) % images.length;
+            images[current].style.display = 'block';
+        }, 3000); // Change image every 3 seconds
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JR Catering{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="{% url 'index' %}" id="logo">JR Catering</a>
+            <button class="burger-btn" aria-label="Toggle menu">
+                <span class="burger-icon"></span>
+            </button>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li class="dropdown">
+                        <a href="#">Menus</a>
+                        <div class="dropdown-content">
+                            <a href="{% url 'food_menu' %}">Food Menu</a>
+                            <a href="{% url 'drinks_menu' %}">Drinks Menu</a>
+                        </div>
+                    </li>
+                    <li><a href="{% if user.is_authenticated %}{% url 'book' %}{% else %}{% url 'login' %}{% endif %}">
+                        {% if user.is_authenticated %}Bookings{% else %}Book{% endif %}</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    {% if user.is_authenticated and user.is_staff %}
+                        <li><a href="{% url 'admin_panel' %}">Admin Panel</a></li>
+                    {% endif %}
+                    <li><a href="{% if user.is_authenticated %}{% url 'logout' %}{% else %}{% url 'login' %}{% endif %}">{% if user.is_authenticated %}Logout{% else %}Login{% endif %}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">{{ message }}</div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>© 2025 JR Catering. All rights reserved.</p>
+    </footer>
+    <script src="{% static 'assets/js/nav.js' %}"></script>
+</body>
+</html>

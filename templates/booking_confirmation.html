@@ -1,0 +1,27 @@
+{% load static %}
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmation{% endblock %}
+
+{% block content %}
+<div class="menu-container">
+    <h2>Booking Confirmation</h2>
+    <div class="booking-details">
+        <p><strong>Name:</strong> {{ booking.name }}</p>
+        <p><strong>Date:</strong> {{ booking.date }}</p>
+        <p><strong>Time:</strong> {{ booking.time }}</p>
+        <p><strong>Number of Guests:</strong> {{ booking.guests }}</p>
+        <p><strong>Email:</strong> {{ booking.email }}</p>
+        <p><strong>Phone:</strong> {{ booking.phone }}</p>
+        {% if booking.special_requests %}
+            <p><strong>Special Requests:</strong> {{ booking.special_requests }}</p>
+        {% endif %}
+    </div>
+    <p>Thank you for your booking! A confirmation email has been sent to {{ booking.email }}.</p>
+    <p>If you need to make any changes to your booking, please contact us.</p>
+    <div class="booking-actions">
+        <a href="{% url 'index' %}" class="btn primary-btn">Return to Home</a>
+        <a href="{% url 'food_menu' %}" class="btn primary-btn">View Menu</a>
+    </div>
+</div>
+{% endblock %}

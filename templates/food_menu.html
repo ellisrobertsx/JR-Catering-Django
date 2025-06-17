@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Food Menu - JR Catering{% endblock %}
+
+{% block content %}
+<h1>Our Food Menu</h1>
+<div class="menu-container">
+    <section class="menu-section">
+        <h2>Starters</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <h3>Sample Starter 1</h3>
+                <p>Description of the starter dish</p>
+                <p class="price">£5.99</p>
+            </div>
+            <div class="menu-item">
+                <h3>Sample Starter 2</h3>
+                <p>Description of the starter dish</p>
+                <p class="price">£6.99</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <h2>Main Courses</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <h3>Sample Main 1</h3>
+                <p>Description of the main course</p>
+                <p class="price">£12.99</p>
+            </div>
+            <div class="menu-item">
+                <h3>Sample Main 2</h3>
+                <p>Description of the main course</p>
+                <p class="price">£14.99</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <h2>Desserts</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <h3>Sample Dessert 1</h3>
+                <p>Description of the dessert</p>
+                <p class="price">£4.99</p>
+            </div>
+            <div class="menu-item">
+                <h3>Sample Dessert 2</h3>
+                <p>Description of the dessert</p>
+                <p class="price">£5.99</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

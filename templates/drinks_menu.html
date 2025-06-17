@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Drinks Menu - JR Catering{% endblock %}
+
+{% block content %}
+<h1>Our Drinks Menu</h1>
+<div class="menu-container">
+    <section class="menu-section">
+        <h2>Hot Beverages</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <h3>Coffee</h3>
+                <p>Freshly brewed coffee</p>
+                <p class="price">£2.50</p>
+            </div>
+            <div class="menu-item">
+                <h3>Tea</h3>
+                <p>Selection of fine teas</p>
+                <p class="price">£2.00</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <h2>Soft Drinks</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <h3>Cola</h3>
+                <p>Refreshing cola drink</p>
+                <p class="price">£2.00</p>
+            </div>
+            <div class="menu-item">
+                <h3>Lemonade</h3>
+                <p>Fresh homemade lemonade</p>
+                <p class="price">£2.50</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <h2>Alcoholic Beverages</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <h3>House Wine</h3>
+                <p>Glass of our house wine</p>
+                <p class="price">£4.50</p>
+            </div>
+            <div class="menu-item">
+                <h3>Beer</h3>
+                <p>Selection of local and imported beers</p>
+                <p class="price">£3.50</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
