@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}JR Catering{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="icon" href="{% static 'favicon.ico' %}">
     <link rel="manifest" href="{% static 'manifest.json' %}">
     {% block head %}{% endblock %}
@@ -27,13 +27,17 @@
                             <a href="{% url 'drinks_menu' %}">Drinks Menu</a>
                         </div>
                     </li>
-                    <li><a href="{% if user.is_authenticated %}{% url 'book' %}{% else %}{% url 'login' %}{% endif %}">
-                        {% if user.is_authenticated %}Bookings{% else %}Book{% endif %}</a></li>
                     <li><a href="{% url 'contact' %}">Contact</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'book' %}">Bookings</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Book</a></li>
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
                     {% if user.is_authenticated and user.is_staff %}
                         <li><a href="{% url 'admin_panel' %}">Admin Panel</a></li>
                     {% endif %}
-                    <li><a href="{% if user.is_authenticated %}{% url 'logout' %}{% else %}{% url 'login' %}{% endif %}">{% if user.is_authenticated %}Logout{% else %}Login{% endif %}</a></li>
                 </ul>
             </nav>
         </div>

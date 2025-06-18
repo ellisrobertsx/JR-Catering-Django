@@ -1,4 +1,3 @@
-```python
 from django.core.management.base import BaseCommand
 from catering.models import FoodItem, DrinkItem
 
@@ -39,4 +38,3 @@ class Command(BaseCommand):
             FoodItem.objects.create(**food)
         
         self.stdout.write(self.style.SUCCESS('Database initialized successfully'))
-```

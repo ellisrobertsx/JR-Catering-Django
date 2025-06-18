@@ -1,5 +1,8 @@
 from django.urls import path
-from . import views
+from .catering import views
+from catering.views import register
+from django.contrib.auth import logout, authenticate, login
+from django.shortcuts import redirect, render
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -12,7 +15,7 @@ urlpatterns = [
     path('delete_booking/<int:booking_id>/', views.delete_booking, name='delete_booking'),
     path('confirmation/<int:booking_id>/', views.confirmation, name='confirmation'),
     path('about/', views.about, name='about'),
-    path('register/', views.register, name='register'),
+    path('register/', register, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('admin_panel/', views.admin_panel, name='admin_panel'),
@@ -25,3 +28,19 @@ urlpatterns = [
     path('manifest.json', views.serve_manifest, name='serve_manifest'),
     path('favicon.ico', views.serve_favicon, name='serve_favicon'),
 ]
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')  
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('index') 
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    return render(request, 'login.html')
