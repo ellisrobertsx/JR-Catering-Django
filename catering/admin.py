@@ -15,9 +15,9 @@ class DrinkItemAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'date', 'time', 'guests')
+    list_display = ('name', 'user', 'date', 'time', 'guests', 'special_requests')  # Updated fields
     list_filter = ('date',)
-    search_fields = ('name', 'email')
+    search_fields = ('name', 'email', 'phone')
 
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):

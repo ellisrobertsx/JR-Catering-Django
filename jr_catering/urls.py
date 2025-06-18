@@ -14,7 +14,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import json
 from datetime import datetime
-from catering.views import register
+from catering.views import register, book, create_booking, edit_booking, delete_booking
 ##from .models import Booking, MenuItem, Category
 
 def home(request):
@@ -25,9 +25,6 @@ def food_menu(request):
 
 def drinks_menu(request):
     return render(request, 'drinks_menu.html')
-
-def book(request):
-    return render(request, 'book.html')
 
 def contact(request):
     return render(request, 'contact.html')
@@ -62,4 +59,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('register/', register, name='register'),
     path('admin_panel/', admin_panel, name='admin_panel'),
+    path('create_booking/', create_booking, name='create_booking'),
+    path('edit_booking/<int:booking_id>/', edit_booking, name='edit_booking'),
+    path('delete_booking/<int:booking_id>/', delete_booking, name='delete_booking'),
 ]

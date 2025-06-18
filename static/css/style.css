@@ -600,14 +600,9 @@ form button:hover {
     transform: translateY(-1px);
 }
 
+/* Ensure booking form is hidden by default and only shown by JS */
 #new-booking-form {
-    margin-bottom: 2rem;
-    background-color: var(--secondary-color);
-    padding: 2rem;
-    border-radius: 8px;
-    border: 1px solid var(--accent-color);
-    width: 95%;
-    margin: 2rem auto;
+    display: none;
 }
 
 #new-booking-form h2 {

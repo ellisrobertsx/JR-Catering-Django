@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Bookings - JR Catering{% endblock %}
+{% block content %}
+<div class="menu-container">
+    <div class="section-title">
+        <span class="line"></span>
+        <h2>Your Bookings</h2>
+        <span class="line"></span>
+    </div>
+    {% if not user.is_authenticated %}
+        <div class="login-prompt">
+            <p>Please log in to view and manage your bookings.</p>
+            <a href="{% url 'login' %}" class="btn primary-btn">Login</a>
+        </div>
+    {% else %}
+        <div class="booking-actions center">
+            <button class="btn primary-btn" onclick="toggleNewBookingForm()">Create New Booking</button>
+        </div>
+        <div id="new-booking-form" class="form-container" style="display: none;">
+            <h2>Make a New Booking</h2>
+            <form id="new-booking-form-element" onsubmit="submitNewBooking(event)">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value="{{ user.username }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required min="">
+                </div>
+                <div class="form-group">
+                    <label for="time">Time:</label>
+                    <select id="time" name="time" required>
+                        <option value="">Select a time</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="guests">Number of Guests:</label>
+                    <input type="number" id="guests" name="guests" min="1" max="20" required>
+                </div>
+                <div class="form-group">
+                    <label for="special_requests">Special Requests (Optional):</label>
+                    <textarea id="special_requests" name="special_requests"></textarea>
+                </div>
+                <div class="booking-actions">
+                    <button type="submit" class="btn edit-btn">Make Booking</button>
+                    <button type="button" class="btn cancel-btn" onclick="toggleNewBookingForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <div class="unique-bookings-grid">
+            {% if bookings %}
+                {% for booking in bookings %}
+                    <div class="unique-booking-card" data-booking-id="{{ booking.id }}">
+                        <div class="unique-booking-display" id="booking-display-{{ booking.id }}">
+                            <div class="booking-info" id="booking-info-{{ booking.id }}">
+                                <p><strong>Booking ID:</strong> {{ booking.id }}</p>
+                                <p><strong>Date:</strong> {{ booking.date }}</p>
+                                <p><strong>Time:</strong> {{ booking.time|time:"H:i" }}</p>
+                                <p><strong>Guests:</strong> {{ booking.guests }}</p>
+                            </div>
+                            <div class="booking-actions">
+                                <button class="btn edit-btn" onclick="toggleEditForm({{ booking.id }})">Edit Booking</button>
+                                <button class="btn cancel-btn" onclick="deleteBooking({{ booking.id }})">Cancel Booking</button>
+                            </div>
+                        </div>
+                        <div class="unique-booking-edit-form" id="edit-form-{{ booking.id }}" style="display: none;">
+                            <form onsubmit="updateBooking(event, {{ booking.id }})">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="name-{{ booking.id }}">Name:</label>
+                                    <input type="text" id="name-{{ booking.id }}" name="name" value="{{ booking.name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email-{{ booking.id }}">Email:</label>
+                                    <input type="email" id="email-{{ booking.id }}" name="email" value="{{ booking.email }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone-{{ booking.id }}">Phone:</label>
+                                    <input type="tel" id="phone-{{ booking.id }}" name="phone" value="{{ booking.phone }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date-{{ booking.id }}">Date:</label>
+                                    <input type="date" id="date-{{ booking.id }}" name="date" value="{{ booking.date }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="time-{{ booking.id }}">Time:</label>
+                                    <select id="time-{{ booking.id }}" name="time" required>
+                                        <option value="">Select a time</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="guests-{{ booking.id }}">Guests:</label>
+                                    <input type="number" id="guests-{{ booking.id }}" name="guests" value="{{ booking.guests }}" min="1" max="20" required>
+                                </div>
+                                <div class="booking-actions">
+                                    <button type="submit" class="btn save-btn">Save Changes</button>
+                                    <button type="button" class="btn cancel-btn" onclick="toggleEditForm({{ booking.id }})">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-bookings">You have no upcoming bookings.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+<script>
+function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+function setMinDate(inputId) {
+    const dateInput = document.getElementById(inputId);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const yyyy = tomorrow.getFullYear();
+    const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const dd = String(tomorrow.getDate()).padStart(2, '0');
+    dateInput.min = `${yyyy}-${mm}-${dd}`;
+}
+function generateTimeSlots(selectId) {
+    const timeSelect = document.getElementById(selectId);
+    timeSelect.innerHTML = '<option value="">Select a time</option>';
+    const startHour = 11;
+    const endHour = 22;
+    for (let hour = startHour; hour < endHour; hour++) {
+        for (let minute = 0; minute < 60; minute += 5) {
+            const formattedHour = String(hour).padStart(2, '0');
+            const formattedMinute = String(minute).padStart(2, '0');
+            const timeString = `${formattedHour}:${formattedMinute}`;
+            const option = document.createElement('option');
+            option.value = timeString;
+            option.textContent = timeString;
+            timeSelect.appendChild(option);
+        }
+    }
+}
+function toggleNewBookingForm() {
+    const form = document.getElementById('new-booking-form');
+    if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+        setMinDate('date');
+        generateTimeSlots('time');
+    } else {
+        form.style.display = 'none';
+    }
+}
+function toggleEditForm(bookingId) {
+    const targetCard = document.querySelector(`.unique-booking-card[data-booking-id="${bookingId}"]`);
+    const allBookingCards = document.querySelectorAll('.unique-booking-card');
+    allBookingCards.forEach(card => {
+        if (card !== targetCard) {
+            card.classList.remove('editing');
+            const editForm = card.querySelector('.unique-booking-edit-form');
+            const displayForm = card.querySelector('.unique-booking-display');
+            if (editForm) editForm.style.display = 'none';
+            if (displayForm) displayForm.style.display = 'block';
+        }
+    });
+    if (targetCard) {
+        const isEditing = targetCard.classList.toggle('editing');
+        const editForm = targetCard.querySelector('.unique-booking-edit-form');
+        const displayForm = targetCard.querySelector('.unique-booking-display');
+        if (isEditing) {
+            editForm.style.display = 'block';
+            displayForm.style.display = 'none';
+            setMinDate(`date-${bookingId}`);
+            generateTimeSlots(`time-${bookingId}`);
+            const currentTime = document.getElementById(`booking-info-${bookingId}`).querySelector('p:nth-child(3)').textContent.split(': ')[1];
+            document.getElementById(`time-${bookingId}`).value = currentTime;
+            targetCard.style.gridColumn = 'span 2';
+        } else {
+            editForm.style.display = 'none';
+            displayForm.style.display = 'block';
+            targetCard.style.gridColumn = 'auto';
+        }
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    setMinDate('date');
+    generateTimeSlots('time');
+});
+function updateBooking(event, bookingId) {
+    event.preventDefault();
+    const nameValue = document.getElementById(`name-${bookingId}`).value;
+    const emailValue = document.getElementById(`email-${bookingId}`).value;
+    const phoneValue = document.getElementById(`phone-${bookingId}`).value;
+    const dateValue = document.getElementById(`date-${bookingId}`).value;
+    const timeValue = document.getElementById(`time-${bookingId}`).value;
+    const guestsValue = document.getElementById(`guests-${bookingId}`).value;
+    const bookingData = {
+        name: nameValue,
+        email: emailValue,
+        phone: phoneValue,
+        date: dateValue,
+        time: timeValue,
+        guests: parseInt(guestsValue)
+    };
+    fetch(`{% url 'edit_booking' booking_id=0 %}`.replace('0', bookingId), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(bookingData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                throw new Error(data.error || 'Failed to update booking');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            const infoDiv = document.getElementById(`booking-info-${bookingId}`);
+            infoDiv.innerHTML = `
+                <p><strong>Booking ID:</strong> ${bookingId}</p>
+                <p><strong>Date:</strong> ${bookingData.date}</p>
+                <p><strong>Time:</strong> ${bookingData.time}</p>
+                <p><strong>Guests:</strong> ${bookingData.guests}</p>
+            `;
+            toggleEditForm(bookingId);
+            alert('Booking updated successfully!');
+        }
+    })
+    .catch(error => {
+        console.error('Update failed:', error);
+        alert(`Error updating booking: ${error.message}`);
+    });
+}
+function deleteBooking(bookingId) {
+    if (confirm('Are you sure you want to cancel this booking?')) {
+        fetch(`{% url 'delete_booking' booking_id=0 %}`.replace('0', bookingId), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                const bookingCard = document.querySelector(`.unique-booking-card[data-booking-id="${bookingId}"]`);
+                if (bookingCard) {
+                    bookingCard.remove();
+                    const remainingBookings = document.querySelectorAll('.unique-booking-card');
+                    if (remainingBookings.length === 0) {
+                        const bookingsGrid = document.querySelector('.unique-bookings-grid');
+                        bookingsGrid.innerHTML = '<p class="no-bookings">You have no upcoming bookings.</p>';
+                    }
+                }
+                alert('Booking cancelled successfully!');
+            } else {
+                alert('Failed to cancel booking. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error cancelling booking. Please try again.');
+        });
+    }
+}
+function submitNewBooking(event) {
+    event.preventDefault();
+    const nameValue = document.getElementById('name').value;
+    const emailValue = document.getElementById('email').value;
+    const phoneValue = document.getElementById('phone').value;
+    const dateValue = document.getElementById('date').value;
+    const timeValue = document.getElementById('time').value;
+    const guestsValue = document.getElementById('guests').value;
+    const specialRequestsValue = document.getElementById('special_requests').value;
+    const bookingData = {
+        name: nameValue,
+        email: emailValue,
+        phone: phoneValue,
+        date: dateValue,
+        time: timeValue,
+        guests: parseInt(guestsValue),
+        special_requests: specialRequestsValue
+    };
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Creating booking...';
+    fetch('{% url 'create_booking' %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(bookingData)
+    })
+    .then(response => {
+        return response.json().then(data => {
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to create booking');
+            }
+            return data;
+        });
+    })
+    .then(data => {
+        const bookingsGrid = document.querySelector('.unique-bookings-grid');
+        const noBookingsMessage = document.querySelector('.no-bookings');
+        if (noBookingsMessage) {
+            noBookingsMessage.remove();
+        }
+        const newBookingCard = `
+            <div class="unique-booking-card" data-booking-id="${data.booking.id}">
+                <div class="unique-booking-display" id="booking-display-${data.booking.id}">
+                    <div class="booking-info" id="booking-info-${data.booking.id}">
+                        <p><strong>Booking ID:</strong> ${data.booking.id}</p>
+                        <p><strong>Date:</strong> ${data.booking.date}</p>
+                        <p><strong>Time:</strong> ${data.booking.time}</p>
+                        <p><strong>Guests:</strong> ${data.booking.guests}</p>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn edit-btn" onclick="toggleEditForm(${data.booking.id})">Edit Booking</button>
+                        <button class="btn cancel-btn" onclick="deleteBooking(${data.booking.id})">Cancel Booking</button>
+                    </div>
+                </div>
+                <div class="unique-booking-edit-form" id="edit-form-${data.booking.id}" style="display: none;">
+                    <form onsubmit="updateBooking(event, ${data.booking.id})">
+                        <div class="form-group">
+                            <label for="name-${data.booking.id}">Name:</label>
+                            <input type="text" id="name-${data.booking.id}" name="name" value="${data.booking.name}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email-${data.booking.id}">Email:</label>
+                            <input type="email" id="email-${data.booking.id}" name="email" value="${data.booking.email}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-${data.booking.id}">Phone:</label>
+                            <input type="tel" id="phone-${data.booking.id}" name="phone" value="${data.booking.phone}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date-${data.booking.id}">Date:</label>
+                            <input type="date" id="date-${data.booking.id}" name="date" value="${data.booking.date}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time-${data.booking.id}">Time:</label>
+                            <select id="time-${data.booking.id}" name="time" required>
+                                <option value="">Select a time</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="guests-${data.booking.id}">Guests:</label>
+                            <input type="number" id="guests-${data.booking.id}" name="guests" value="${data.booking.guests}" min="1" max="20" required>
+                        </div>
+                        <div class="booking-actions">
+                            <button type="submit" class="btn save-btn">Save Changes</button>
+                            <button type="button" class="btn cancel-btn" onclick="toggleEditForm(${data.booking.id})">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        bookingsGrid.insertAdjacentHTML('afterbegin', newBookingCard);
+        generateTimeSlots(`time-${data.booking.id}`);
+        document.getElementById(`time-${data.booking.id}`).value = data.booking.time;
+        toggleNewBookingForm();
+        document.getElementById('new-booking-form-element').reset();
+        alert('Booking created successfully!');
+    })
+    .catch(error => {
+        alert(error.message || 'Error creating booking. Please try again.');
+    })
+    .finally(() => {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Make Booking';
+    });
+}
+</script>
+{% endblock %}

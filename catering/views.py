@@ -57,7 +57,7 @@ def contact(request):
             messages.error(request, 'Please fill in all required fields.')
         else:
             try:
-                Contact.objects.create(name=name, email=email, phone=phone, message=message)
+                Contact.objects.create(name=name, email=email, message=message)
                 messages.success(request, 'Message sent successfully!')
                 return redirect('contact')
             except Exception as e:
@@ -67,10 +67,8 @@ def contact(request):
 
 @login_required
 def book(request):
-    # Display user bookings
-    logger.debug(f"Book - User authenticated: {request.user.is_authenticated}")
     bookings = Booking.objects.filter(user=request.user, date__gte=timezone.now().date()).order_by('date', 'time')
-    return render(request, 'book.html', {'bookings': bookings})
+    return render(request, 'bookings.html', {'bookings': bookings})
 
 @login_required
 def create_booking(request):
@@ -105,7 +103,7 @@ def create_booking(request):
                     'name': new_booking.name,
                     'email': new_booking.email,
                     'phone': new_booking.phone,
-                    'date': new_booking.date,
+                    'date': str(new_booking.date),
                     'time': new_booking.time,
                     'guests': new_booking.guests
                 }
