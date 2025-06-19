@@ -214,6 +214,25 @@ def login_view(request):
         messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
 
+def admin_login_view(request):
+    # Handle admin login and redirect to Django admin
+    logger.debug(f"Admin Login - Method: {request.method}")
+    if request.user.is_authenticated and request.user.is_staff:
+        return redirect('/admin/')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if not username or not password:
+            messages.error(request, 'Please enter username and password.')
+            return render(request, 'admin_login.html')
+        user = authenticate(request, username=username, password=password)
+        if user is not None and user.is_staff:
+            login(request, user)
+            messages.success(request, 'Admin login successful.')
+            return redirect('/admin/')
+        messages.error(request, 'Invalid credentials or insufficient permissions.')
+    return render(request, 'admin_login.html')
+
 def logout_view(request):
     # Handle user logout
     logger.debug(f"Logout - User authenticated: {request.user.is_authenticated}")

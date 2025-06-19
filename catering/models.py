@@ -23,6 +23,13 @@ class DrinkItem(models.Model):
         return self.name
 
 class Booking(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+        ('completed', 'Completed'),
+    ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings', null=True)  # Nullable for existing rows
     name = models.CharField(max_length=100, null=True, blank=True)  # Nullable for existing rows
     email = models.EmailField(null=True, blank=True)  # Nullable for existing rows
@@ -32,9 +39,15 @@ class Booking(models.Model):
     guests = models.PositiveIntegerField()  # Number of guests
     special_requests = models.TextField(blank=True)  # Special requests
     created_at = models.DateTimeField(default=timezone.now)  # Default for existing rows
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    admin_response = models.TextField(blank=True, help_text="Admin's response to this booking")
+    admin_notes = models.TextField(blank=True, help_text="Internal notes for admin use only")
 
     def __str__(self):
         return f"{self.name or (self.user.username if self.user else 'Unknown')} - {self.date} {self.time} ({self.guests} guests)"
+
+    class Meta:
+        ordering = ['-date', '-time']
 
 class Contact(models.Model):
     name = models.CharField(max_length=100)

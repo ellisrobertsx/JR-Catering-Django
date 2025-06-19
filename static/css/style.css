@@ -70,6 +70,7 @@ header {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    position: relative; /* Added for proper positioning */
 }
 
 #logo {
@@ -91,6 +92,10 @@ nav {
     cursor: pointer;
     padding: 10px;
     z-index: 1001;
+    position: absolute; /* Position absolutely */
+    right: 20px; /* Keep it on the right */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Center vertically */
 }
 
 .burger-icon {
@@ -204,8 +209,11 @@ nav {
     background-color: var(--hover-color);
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
+/* Desktop hover behavior */
+@media screen and (min-width: 768px) {
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
 }
 
 /* Alerts for messages */
@@ -418,7 +426,7 @@ form select {
     margin-bottom: 15px;
     border: 1px solid var(--accent-color);
     border-radius: 5px;
-    background-color: var(--primary-color);
+    background-color: white;
     color: var(--text-color);
     font-size: 14px;
     text-align: center;
@@ -565,6 +573,40 @@ form button:hover {
     margin-top: 15px;
 }
 
+/* Create New Booking Button Styling */
+.booking-actions.center {
+    text-align: center;
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.booking-actions.center .btn {
+    display: inline-block;
+    width: auto;
+    min-width: 150px;
+    max-width: 250px; /* Added max-width to prevent it from getting too wide */
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    flex-shrink: 0; /* Prevent the button from shrinking */
+}
+
+.booking-actions.center .btn:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .unique-booking-card .btn,
 .unique-booking-actions .btn {
     width: 100%;
@@ -603,39 +645,83 @@ form button:hover {
 /* Ensure booking form is hidden by default and only shown by JS */
 #new-booking-form {
     display: none;
+    margin: 1rem auto; /* Reduced from 2rem */
+    padding: 1rem; /* Reduced from 1.5rem */
+    background-color: var(--secondary-color);
+    border-radius: 12px;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* Reduced from 600px */
+    width: 90%;
+    position: relative;
+    z-index: 10;
 }
 
 #new-booking-form h2 {
     color: var(--accent-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem; /* Reduced from 1rem */
     text-align: center;
+    font-size: 1.4rem; /* Reduced from 1.6rem */
 }
 
 #new-booking-form input,
 #new-booking-form select,
 #new-booking-form textarea {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 10px;
+    padding: 8px; /* Reduced from 10px */
+    margin-bottom: 6px; /* Reduced from 8px */
     border: 2px solid var(--accent-color);
     border-radius: 4px;
-    font-size: 16px;
-    background-color: var(--primary-color);
+    font-size: 14px; /* Reduced from 16px */
+    background-color: white;
     color: var(--text-color);
     text-align: center;
     transition: all 0.3s ease;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-#new-booking-form input:focus,
-#new-booking-form select:focus,
-#new-booking-form textarea:focus,
-#new-booking-form input:hover,
-#new-booking-form select:hover,
-#new-booking-form textarea:hover {
-    border-color: var(--hover-color);
-    outline: none;
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+/* Reduce form group spacing */
+#new-booking-form .form-group {
+    margin-bottom: 8px; /* Reduced from default */
+}
+
+/* Reduce label spacing */
+#new-booking-form label {
+    margin-bottom: 2px; /* Reduced from 5px */
+    font-size: 0.9em; /* Slightly smaller labels */
+}
+
+/* Reduce button spacing in form */
+#new-booking-form .booking-actions {
+    margin-top: 10px; /* Reduced from 15px */
+    gap: 1px; /* Reduced from 2px */
+}
+
+#new-booking-form .booking-actions .btn {
+    padding: 8px 16px; /* Reduced from 12px 20px */
+    margin: 4px 0; /* Reduced from 8px */
+    font-size: 14px; /* Reduced from 16px */
+}
+
+/* Add smooth animation for form appearance */
+#new-booking-form.show {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add spacing between form and existing bookings */
+.unique-bookings-grid {
+    margin-top: 2rem; /* Add space above existing bookings */
 }
 
 .no-bookings {
@@ -643,6 +729,22 @@ form button:hover {
     color: var(--text-color);
     margin: 20px 0;
     font-style: italic;
+}
+
+.no-menu-items {
+    text-align: center;
+    color: var(--text-color);
+    margin: 40px 0;
+    padding: 20px;
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    border: 1px solid var(--accent-color);
+}
+
+.no-menu-items p {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--accent-color);
 }
 
 /* Footer */
@@ -660,6 +762,10 @@ footer {
 @media screen and (max-width: 767px) {
     .burger-btn {
         display: block;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .nav-links {
@@ -673,6 +779,7 @@ footer {
     .header-content {
         flex-direction: row;
         align-items: center;
+        position: relative;
     }
 
     main {

@@ -15,7 +15,7 @@
         </div>
     {% else %}
         <div class="booking-actions center">
-            <button class="btn primary-btn" onclick="toggleNewBookingForm()">Create New Booking</button>
+            <button class="btn" onclick="toggleNewBookingForm()">Create New Booking</button>
         </div>
         <div id="new-booking-form" class="form-container" style="display: none;">
             <h2>Make a New Booking</h2>
@@ -150,9 +150,12 @@ function toggleNewBookingForm() {
     const form = document.getElementById('new-booking-form');
     if (form.style.display === 'none' || form.style.display === '') {
         form.style.display = 'block';
+        form.classList.add('show');
         setMinDate('date');
         generateTimeSlots('time');
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
+        form.classList.remove('show');
         form.style.display = 'none';
     }
 }
@@ -372,6 +375,7 @@ function submitNewBooking(event) {
         document.getElementById(`time-${data.booking.id}`).value = data.booking.time;
         toggleNewBookingForm();
         document.getElementById('new-booking-form-element').reset();
+        document.getElementById('new-booking-form').classList.remove('show');
         alert('Booking created successfully!');
     })
     .catch(error => {

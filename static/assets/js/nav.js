@@ -7,14 +7,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (burgerBtn && navLinks) {
         burgerBtn.addEventListener('click', function() {
             navLinks.classList.toggle('active');
+            burgerBtn.classList.toggle('open');
         });
     }
+
+    // Dropdown functionality for mobile
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const dropdownContent = dropdown.querySelector('.dropdown-content');
+        const dropdownLink = dropdown.querySelector('a');
+        
+        if (dropdownLink && dropdownContent) {
+            dropdownLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                dropdownContent.classList.toggle('show');
+            });
+        }
+    });
 
     // Close nav on link click (for mobile UX)
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', function() {
-            navLinks.classList.remove('active');
+            // Don't close nav if it's a dropdown toggle
+            if (!this.parentElement.classList.contains('dropdown')) {
+                navLinks.classList.remove('active');
+                burgerBtn.classList.remove('open');
+            }
         });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-content').forEach(content => {
+                content.classList.remove('show');
+            });
+        }
     });
 
     // Optionally, show a message on login/logout (client-side only)

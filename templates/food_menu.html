@@ -4,54 +4,32 @@
 {% block title %}Food Menu - JR Catering{% endblock %}
 
 {% block content %}
-<h1>Our Food Menu</h1>
 <div class="menu-container">
-    <section class="menu-section">
-        <h2>Starters</h2>
-        <div class="menu-items">
-            <div class="menu-item">
-                <h3>Sample Starter 1</h3>
-                <p>Description of the starter dish</p>
-                <p class="price">£5.99</p>
-            </div>
-            <div class="menu-item">
-                <h3>Sample Starter 2</h3>
-                <p>Description of the starter dish</p>
-                <p class="price">£6.99</p>
-            </div>
+    <div class="section-title">
+        <span class="line"></span>
+        <h2>Our Food Menu</h2>
+        <span class="line"></span>
+    </div>
+    
+    {% if menu_items %}
+        {% for category, items in menu_items.items %}
+            <section class="menu-section">
+                <h2>{{ category }}</h2>
+                <div class="menu-items">
+                    {% for item in items %}
+                        <div class="menu-item">
+                            <h3>{{ item.name }}</h3>
+                            <p>{{ item.description }}</p>
+                            <p class="price">£{{ item.price }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endfor %}
+    {% else %}
+        <div class="no-menu-items">
+            <p>No food items available at the moment. Please check back later!</p>
         </div>
-    </section>
-
-    <section class="menu-section">
-        <h2>Main Courses</h2>
-        <div class="menu-items">
-            <div class="menu-item">
-                <h3>Sample Main 1</h3>
-                <p>Description of the main course</p>
-                <p class="price">£12.99</p>
-            </div>
-            <div class="menu-item">
-                <h3>Sample Main 2</h3>
-                <p>Description of the main course</p>
-                <p class="price">£14.99</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="menu-section">
-        <h2>Desserts</h2>
-        <div class="menu-items">
-            <div class="menu-item">
-                <h3>Sample Dessert 1</h3>
-                <p>Description of the dessert</p>
-                <p class="price">£4.99</p>
-            </div>
-            <div class="menu-item">
-                <h3>Sample Dessert 2</h3>
-                <p>Description of the dessert</p>
-                <p class="price">£5.99</p>
-            </div>
-        </div>
-    </section>
+    {% endif %}
 </div>
 {% endblock %}

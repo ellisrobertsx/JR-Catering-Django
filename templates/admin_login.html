@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Admin Login - JR Catering{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h2>Admin Login</h2>
+    <p class="admin-notice">Access the Django Admin Panel</p>
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">{{ message }}</div>
+    {% endfor %}
+    <form method="POST" action="{% url 'admin_login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="admin-btn">Login to Admin Panel</button>
+    </form>
+    <p class="auth-links">Regular user? <a href="{% url 'login' %}">Login here</a></p>
+    <p class="auth-links">Or go directly to <a href="/admin/">Django Admin</a></p>
+</div>
+
+<style>
+.admin-notice {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.admin-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.admin-btn:hover {
+    background-color: #218838;
+}
+</style>
+{% endblock %} 
