@@ -1,0 +1,1 @@
+web: gunicorn jr_catering.wsgi --log-file - 
