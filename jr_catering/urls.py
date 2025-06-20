@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -22,7 +23,10 @@ from catering.views import (
 ##from .models import Booking, MenuItem, Category
 
 def home(request):
-    return render(request, 'index.html')
+    try:
+        return render(request, 'index.html')
+    except Exception as e:
+        return HttpResponse(f"Error: {str(e)}", status=500)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
