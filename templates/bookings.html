@@ -255,7 +255,15 @@ function deleteBooking(bookingId) {
             }
         })
         .then(response => {
-            if (response.ok) {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Failed to cancel booking');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
                 const bookingCard = document.querySelector(`.unique-booking-card[data-booking-id="${bookingId}"]`);
                 if (bookingCard) {
                     bookingCard.remove();
@@ -266,13 +274,11 @@ function deleteBooking(bookingId) {
                     }
                 }
                 alert('Booking cancelled successfully!');
-            } else {
-                alert('Failed to cancel booking. Please try again.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error cancelling booking. Please try again.');
+            alert(`Error cancelling booking: ${error.message}`);
         });
     }
 }

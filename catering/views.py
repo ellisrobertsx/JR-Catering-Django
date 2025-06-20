@@ -67,7 +67,16 @@ def contact(request):
 
 @login_required
 def book(request):
-    bookings = Booking.objects.filter(user=request.user, date__gte=timezone.now().date()).order_by('date', 'time')
+    # Get current date and time
+    now = timezone.now()
+    # Filter bookings that are in the future (date and time)
+    bookings = Booking.objects.filter(
+        user=request.user,
+        date__gte=now.date()
+    ).exclude(
+        date=now.date(),
+        time__lt=now.time()
+    ).order_by('date', 'time')
     return render(request, 'bookings.html', {'bookings': bookings})
 
 @login_required
@@ -118,6 +127,12 @@ def edit_booking(request, booking_id):
     # Edit an existing booking
     logger.debug(f"Edit_booking - User authenticated: {request.user.is_authenticated}")
     booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    
+    # Check if booking is in the past
+    now = timezone.now()
+    if booking.date < now.date() or (booking.date == now.date() and booking.time < now.time()):
+        return JsonResponse({'error': 'Cannot edit past bookings'}, status=400)
+    
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -139,6 +154,12 @@ def delete_booking(request, booking_id):
     # Delete a booking
     logger.debug(f"Delete_booking - User authenticated: {request.user.is_authenticated}")
     booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    
+    # Check if booking is in the past
+    now = timezone.now()
+    if booking.date < now.date() or (booking.date == now.date() and booking.time < now.time()):
+        return JsonResponse({'error': 'Cannot delete past bookings'}, status=400)
+    
     if request.method == 'POST':
         try:
             booking.delete()
@@ -206,32 +227,15 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, 'Logged in successfully.')
-            next_page = request.GET.get('next', 'index')
             if user.is_staff:
-                return redirect('admin_panel')
-            return redirect(next_page)
+                messages.success(request, 'Admin login successful. Welcome to the admin panel.')
+                return redirect('/admin/')
+            else:
+                messages.success(request, 'Logged in successfully.')
+                next_page = request.GET.get('next', 'index')
+                return redirect(next_page)
         messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
-
-def admin_login_view(request):
-    # Handle admin login and redirect to Django admin
-    logger.debug(f"Admin Login - Method: {request.method}")
-    if request.user.is_authenticated and request.user.is_staff:
-        return redirect('/admin/')
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if not username or not password:
-            messages.error(request, 'Please enter username and password.')
-            return render(request, 'admin_login.html')
-        user = authenticate(request, username=username, password=password)
-        if user is not None and user.is_staff:
-            login(request, user)
-            messages.success(request, 'Admin login successful.')
-            return redirect('/admin/')
-        messages.error(request, 'Invalid credentials or insufficient permissions.')
-    return render(request, 'admin_login.html')
 
 def logout_view(request):
     # Handle user logout
@@ -243,19 +247,6 @@ def logout_view(request):
     response['Pragma'] = 'no-cache'
     response['Expires'] = '0'
     return response
-
-@user_passes_test(lambda u: u.is_staff)
-def admin_panel(request):
-    # Admin panel for managing items
-    logger.debug(f"Admin_panel - User authenticated: {request.user.is_authenticated}")
-    date_filter = request.GET.get('date_filter')
-    bookings = Booking.objects.filter(date=date_filter).order_by('-date') if date_filter else Booking.objects.order_by('-date')
-    return render(request, 'admin_panel.html', {
-        'food_items': FoodItem.objects.all(),
-        'drink_items': DrinkItem.objects.all(),
-        'bookings': bookings,
-        'messages': Contact.objects.order_by('-created_at')
-    })
 
 @user_passes_test(lambda u: u.is_staff)
 def add_menu_item(request):
@@ -281,7 +272,7 @@ def add_menu_item(request):
                 else:
                     DrinkItem.objects.create(name=name, description=description, price=price, category=category)
                 messages.success(request, 'Menu item added!')
-                return redirect('admin_panel')
+                return redirect('/admin/')
             except Exception as e:
                 logger.error(f"Error in add_menu_item: {str(e)}")
                 messages.error(request, 'Error adding menu item.')
@@ -295,7 +286,7 @@ def delete_food_item(request, item_id):
         food_item = get_object_or_404(FoodItem, id=item_id)
         food_item.delete()
         messages.success(request, 'Food item deleted!')
-    return redirect('admin_panel')
+    return redirect('/admin/')
 
 @user_passes_test(lambda u: u.is_staff)
 def delete_drink_item(request, item_id):
@@ -305,7 +296,7 @@ def delete_drink_item(request, item_id):
         drink_item = get_object_or_404(DrinkItem, id=item_id)
         drink_item.delete()
         messages.success(request, 'Drink item deleted!')
-    return redirect('admin_panel')
+    return redirect('/admin/')
 
 @user_passes_test(lambda u: u.is_staff)
 def admin_delete_booking(request, booking_id):
@@ -315,7 +306,7 @@ def admin_delete_booking(request, booking_id):
         booking = get_object_or_404(Booking, id=booking_id)
         booking.delete()
         messages.success(request, 'Booking deleted!')
-    return redirect('admin_panel')
+    return redirect('/admin/')
 
 @user_passes_test(lambda u: u.is_staff)
 def mark_message_read(request, message_id):
@@ -326,7 +317,7 @@ def mark_message_read(request, message_id):
         message.is_read = True
         message.save()
         messages.success(request, 'Message marked as read!')
-    return redirect('admin_panel')
+    return redirect('/admin/')
 
 @user_passes_test(lambda u: u.is_staff)
 def delete_message(request, message_id):
@@ -336,7 +327,7 @@ def delete_message(request, message_id):
         message = get_object_or_404(Contact, id=message_id)
         message.delete()
         messages.success(request, 'Message deleted!')
-    return redirect('admin_panel')
+    return redirect('/admin/')
 
 def serve_manifest(request):
     # Serve manifest.json

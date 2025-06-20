@@ -15,6 +15,11 @@
     box-sizing: border-box;
 }
 
+/* Remove focus outlines globally */
+*:focus {
+    outline: none;
+}
+
 html, body {
     height: 100%;
 }
@@ -147,7 +152,7 @@ nav {
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--accent-color);
+    border: none; /* Remove the red border */
     list-style: none;
     text-align: center;
     z-index: 1000;
@@ -174,10 +179,16 @@ nav {
     text-decoration: none;
     transition: color 0.3s ease;
     text-align: center;
+    outline: none; /* Remove default focus outline */
 }
 
 .nav-links a:hover {
     color: var(--accent-color); /* Red on hover */
+    outline: none; /* Remove outline on hover */
+}
+
+.nav-links a:focus {
+    outline: none; /* Remove outline on focus */
 }
 
 .dropdown {
@@ -186,33 +197,60 @@ nav {
 
 .dropdown-content {
     display: none;
-    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 160px;
     background-color: var(--primary-color);
     padding: 10px 0;
     margin-top: 5px;
     border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    z-index: 1001;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .dropdown-content.show {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .dropdown-content a {
     padding: 10px 20px;
     display: block;
-    text-align: center;
+    text-align: left;
     color: white;
     text-decoration: none;
+    transition: background-color 0.3s ease;
+    outline: none; /* Remove default focus outline */
 }
 
 .dropdown-content a:hover {
     background-color: var(--hover-color);
+    outline: none; /* Remove outline on hover */
 }
 
-/* Desktop hover behavior */
+.dropdown-content a:focus {
+    outline: none; /* Remove outline on focus */
+}
+
+/* Desktop hover behavior - improved */
 @media screen and (min-width: 768px) {
     .dropdown:hover .dropdown-content {
         display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Ensure dropdown stays open when hovering over content */
+    .dropdown-content:hover {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -339,7 +377,7 @@ nav {
 }
 
 .menu-section h2 {
-    color: var(--accent-color);
+    color: var(--text-color);
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
 }
@@ -391,7 +429,7 @@ nav {
 .section-title h2 {
     margin: 0 1rem;
     white-space: nowrap;
-    color: var(--accent-color);
+    color: var(--text-color);
 }
 
 .section-title .line {
@@ -780,6 +818,25 @@ footer {
         flex-direction: row;
         align-items: center;
         position: relative;
+    }
+
+    /* Mobile dropdown styles */
+    .dropdown-content {
+        position: static;
+        width: 100%;
+        min-width: auto;
+        margin-top: 0;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .dropdown-content a {
+        text-align: center;
+        padding: 8px 20px;
     }
 
     main {
