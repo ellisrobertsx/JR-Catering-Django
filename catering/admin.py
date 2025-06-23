@@ -47,7 +47,7 @@ class BookingAdmin(admin.ModelAdmin):
     
     def save_model(self, request, obj, form, change):
         if change and 'admin_response' in form.changed_data:
-            # You could add email notification here if needed
+            
             pass
         super().save_model(request, obj, form, change)
 
