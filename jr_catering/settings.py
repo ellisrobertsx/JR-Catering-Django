@@ -72,8 +72,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 if DEBUG:
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 else:
-    # Enable WhiteNoise's GZip compression for production
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    # Use WhiteNoise's simple storage for production (more reliable)
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Security settings for production
 if not DEBUG:
