@@ -1,4 +1,4 @@
-<img src="static/readme-images/jr-catering-overall.png" alt="JR Catering Homepage" width="800"/>
+<img src="static/assets/images/Django-Screenshot.png" alt="JR Catering Homepage" width="800"/>
 
 # JR Catering Website
 
