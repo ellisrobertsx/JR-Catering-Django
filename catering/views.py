@@ -11,7 +11,7 @@ import logging
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 logger = logging.getLogger(__name__)
 
 def index(request):

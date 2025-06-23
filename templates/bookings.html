@@ -61,7 +61,7 @@
             {% if bookings %}
                 {% for booking in bookings %}
                     <div class="unique-booking-card" data-booking-id="{{ booking.id }}">
-                        <div class="unique-booking-display" id="booking-display-{{ booking.id }}">
+                        <div class="unique-booking-display" id="booking-display-{{ booking.id }}" style="display: block;">
                             <div class="booking-info" id="booking-info-{{ booking.id }}">
                                 <p><strong>Booking ID:</strong> {{ booking.id }}</p>
                                 <p><strong>Date:</strong> {{ booking.date }}</p>
@@ -159,35 +159,65 @@ function toggleNewBookingForm() {
         form.style.display = 'none';
     }
 }
+// Global variable to track which form is currently open
+let currentlyOpenFormId = null;
+
 function toggleEditForm(bookingId) {
+    console.log('Toggle edit form for booking:', bookingId);
+    
+    // Get the target card
     const targetCard = document.querySelector(`.unique-booking-card[data-booking-id="${bookingId}"]`);
-    const allBookingCards = document.querySelectorAll('.unique-booking-card');
-    allBookingCards.forEach(card => {
-        if (card !== targetCard) {
-            card.classList.remove('editing');
-            const editForm = card.querySelector('.unique-booking-edit-form');
-            const displayForm = card.querySelector('.unique-booking-display');
-            if (editForm) editForm.style.display = 'none';
-            if (displayForm) displayForm.style.display = 'block';
+    if (!targetCard) {
+        console.error('Target card not found for booking:', bookingId);
+        return;
+    }
+    
+    const targetEditForm = targetCard.querySelector('.unique-booking-edit-form');
+    const targetDisplayForm = targetCard.querySelector('.unique-booking-display');
+    
+    if (!targetEditForm || !targetDisplayForm) {
+        console.error('Edit form or display form not found for booking:', bookingId);
+        return;
+    }
+    
+    // If this form is already open, close it
+    if (currentlyOpenFormId === bookingId) {
+        console.log('Closing form for booking:', bookingId);
+        targetEditForm.style.display = 'none';
+        targetDisplayForm.style.display = 'block';
+        currentlyOpenFormId = null;
+        return;
+    }
+    
+    // Close any currently open form
+    if (currentlyOpenFormId !== null) {
+        const currentlyOpenCard = document.querySelector(`.unique-booking-card[data-booking-id="${currentlyOpenFormId}"]`);
+        if (currentlyOpenCard) {
+            const currentlyOpenEditForm = currentlyOpenCard.querySelector('.unique-booking-edit-form');
+            const currentlyOpenDisplayForm = currentlyOpenCard.querySelector('.unique-booking-display');
+            if (currentlyOpenEditForm && currentlyOpenDisplayForm) {
+                currentlyOpenEditForm.style.display = 'none';
+                currentlyOpenDisplayForm.style.display = 'block';
+                console.log('Closed previously open form for booking:', currentlyOpenFormId);
+            }
         }
-    });
-    if (targetCard) {
-        const isEditing = targetCard.classList.toggle('editing');
-        const editForm = targetCard.querySelector('.unique-booking-edit-form');
-        const displayForm = targetCard.querySelector('.unique-booking-display');
-        if (isEditing) {
-            editForm.style.display = 'block';
-            displayForm.style.display = 'none';
-            setMinDate(`date-${bookingId}`);
-            generateTimeSlots(`time-${bookingId}`);
-            const currentTime = document.getElementById(`booking-info-${bookingId}`).querySelector('p:nth-child(3)').textContent.split(': ')[1];
-            document.getElementById(`time-${bookingId}`).value = currentTime;
-            targetCard.style.gridColumn = 'span 2';
-        } else {
-            editForm.style.display = 'none';
-            displayForm.style.display = 'block';
-            targetCard.style.gridColumn = 'auto';
-        }
+    }
+    
+    // Open the target form
+    console.log('Opening form for booking:', bookingId);
+    targetEditForm.style.display = 'block';
+    targetDisplayForm.style.display = 'none';
+    currentlyOpenFormId = bookingId;
+    
+    // Initialize form fields
+    setMinDate(`date-${bookingId}`);
+    generateTimeSlots(`time-${bookingId}`);
+    
+    // Set current time value
+    const timeElement = document.getElementById(`time-${bookingId}`);
+    if (timeElement) {
+        const currentTime = document.getElementById(`booking-info-${bookingId}`).querySelector('p:nth-child(3)').textContent.split(': ')[1];
+        timeElement.value = currentTime;
     }
 }
 document.addEventListener('DOMContentLoaded', function() {

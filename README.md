@@ -1,131 +1,406 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+<img src="static/readme-images/jr-catering-overall.png" alt="JR Catering Homepage" width="800"/>
 
-Welcome USER_NAME,
+# JR Catering Website
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. It's perfectly ok to use this template as the basis for your project submissions.
+## Description
+A full-stack restaurant booking and catering management system that allows users to create accounts, make reservations, and manage their bookings. The website also provides information about the catering services, menu options, and contact details.
 
-You can safely delete this README.md file or change it for your own project. Please do read it at least once, though! It contains some important information about Gitpod and the extensions we use. Some of this information has been updated since the video content was created. The last update to this file was: **June 18, 2024**
+## Table of Contents
 
-## Gitpod Reminders
+1. [Description](#description)
+2. [Features](#features)
+   - [Homepage](#homepage)
+   - [Booking System](#booking-system)
+   - [User Authentication](#user-authentication)
+   - [Contact Page](#contact-page)
+   - [Menu Page](#menu-page)
 
-To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
+3. [Design](#design)
+   - [Color Scheme](#color-scheme)
+   - [Typography](#typography)
+   - [Layout](#layout)
+   - [Images](#images)
+   - [User Interface Elements](#user-interface-elements)
+   - [Responsive Design](#responsive-design)
+   - [Design Principles](#design-principles)
 
-`python3 -m http.server`
+4. [Technologies Used](#technologies-used)
 
-A blue button should appear to click: _Make Public_,
+5. [Installation & Setup](#installation--setup)
 
-Another blue button should appear to click: _Open Browser_.
+6. [Libraries and Tools](#libraries-and-tools)
 
-To run a backend Python file, type `python3 app.py` if your Python file is named `app.py`, of course.
+7. [Bugs](#bugs)
 
-A blue button should appear to click: _Make Public_,
+8. [User Stories](#user-stories)
+   - [First Time Visitor Goals](#first-time-visitor-goals)
+   - [Returning Visitor Goals](#returning-visitor-goals)
+   - [Business Owner Goals](#business-owner-goals)
+   - [Admin User Goals](#admin-user-goals)
 
-Another blue button should appear to click: _Open Browser_.
+9. [Deployment](#deployment)
+   - [Heroku Deployment](#heroku-deployment)
 
-By Default, Gitpod gives you superuser security privileges. Therefore, you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
+10. [Usage](#usage)
+    - [User Features](#user-features)
+    - [Admin Features](#admin-features)
 
-To log into the Heroku toolbelt CLI:
+11. [Testing](#testing)
+    - [Manual Testing](#manual-testing)
 
-1. Log in to your Heroku account and go to *Account Settings* in the menu under your avatar.
-2. Scroll down to the *API Key* and click *Reveal*
-3. Copy the key
-4. In Gitpod, from the terminal, run `heroku_config`
-5. Paste in your API key when asked
+12. [Future Features](#future-features)
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you, so do not share it. If you accidentally make it public, you can create a new one with _Regenerate API Key_.
+13. [Credits](#credits)
 
-### Connecting your Mongo database
+## Features
+  - User Authentication (Register/Login)
+  - Booking Management System
+  - Create new bookings
+  - Edit existing bookings
+  - Cancel bookings  
+  - View booking history
+  - Real-time Booking Updates
+  - Contact Form with Email Integration
+  - Interactive Menu Display
+  - Responsive Design for Mobile and Desktop
+  - Admin Dashboard for Booking Management
+  - View all bookings
+  - Manage user accounts
+  - Handle booking requests
+  - Update menu items
 
-- **Connect to Mongo CLI on a IDE**
-- navigate to your MongoDB Clusters Sandbox
-- click **"Connect"** button
-- select **"Connect with the MongoDB shell"**
-- select **"I have the mongo shell installed"**
-- choose **mongosh (2.0 or later)** for : **"Select your mongo shell version"**
-- choose option: **"Run your connection string in your command line"**
-- in the terminal, paste the copied code `mongo "mongodb+srv://<CLUSTER-NAME>.mongodb.net/<DBname>" --apiVersion 1 --username <USERNAME>`
-  - replace all `<angle-bracket>` keys with your own data
-- enter password _(will not echo **\*\*\*\*** on screen)_
+### Homepage
+The homepage welcomes users with:
+- Clean, modern design
+- Navigation menu for easy access to all sections
+- Featured menu items
+- About us section
+- Call-to-action buttons for booking and contact
+- Responsive design that works on all
 
-------
+### Booking System
+Comprehensive booking management:
+- User-friendly booking form
+- Date and time selection
+- Guest number specification
+- Special requests field
+- Real-time availability checking
+- View existing bookings
+- Edit booking functionality
+- Cancel booking option
+- Booking history
 
-## Release History
+### User Authentication
+Secure user account management:
+- User registration
+- Login system
+- Password reset functionality
+- Personal information storage
+- Session management
+- Security features
 
-We continually tweak and adjust this template to help give you the best experience. Here is the version history:
+### Contact Page
+Interactive contact features:
+- Contact form with email integration
+- Business hours display
+- Location information
+- Google Maps integration
+- Phone and email contact options
+- Social media links
 
-**June 18, 2024,** Add Mongo back into template
 
-**June 14, 2024,** Temporarily remove Mongo until the key issue is resolved
+### Menu Page
+Interactive menu display featuring:
+- Categorized food sections
+- Detailed descriptions of each dish
+- Pricing information
+- Special dietary indicators (Vegetarian, Vegan, Gluten-Free)
 
-**May 28 2024:** Fix Mongo and Links installs
+### Admin Page
+Admin Panel to control the site
+- Admin can update both food and drink menus
+- Admin can respond to any message sent
+- Admin can handle bookings made by users 
 
-**April 26 2024:** Update node version to 16
 
-**September 20 2023:** Update Python version to 3.9.17.
+## Design
 
-**September 1 2021:** Remove `PGHOSTADDR` environment variable.
+### Color Scheme
+The website uses a carefully selected color palette to create a professional and appetizing atmosphere:
+- Primary Color (#4A4A4A): Used for main text and headers, providing clear readability
+- Secondary Color (#E8B23D): Adds warmth and represents the culinary theme
+- Accent Color (#2C5530): Used for buttons and call-to-action elements
+- Background Color (#FFFFFF): Clean white background to enhance content visibility
+- Footer Color (#333333): Dark footer for contrast and professional finish
 
-**July 19 2021:** Remove `font_fix` script now that the terminal font issue is fixed.
+### Typography
+- Primary Font: 'Roboto' - Used for body text and general content for its excellent readability
+- Secondary Font: 'Playfair Display' - Used for headers and titles to add elegance
+- Accent Font: 'Dancing Script' - Used sparingly for special text elements to add a touch of sophistication
 
-**July 2 2021:** Remove extensions that are not available in Open VSX.
+### Layout
+The website follows a clean, modern layout structure:
+- Fixed navigation bar for easy access to all sections
+- Hero section with striking imagery and clear call-to-action
+- Grid-based menu layout for easy scanning
+- Card-based design for booking management
+- Responsive columns that adapt to different screen sizes
+- Consistent spacing and padding throughout
 
-**June 30 2021:** Combined the P4 and P5 templates into one file, added the uptime script. See the FAQ at the end of this file.
+### Images
+- High-quality food photography to showcase menu items
+- Professional restaurant ambiance shots
+- Optimized images for fast loading times
+- Alt text for accessibility
+- Responsive image sizing for different devices
 
-**June 10 2021:** Added: `font_fix` script and alias to fix the Terminal font issue
+### User Interface Elements
+- Interactive buttons with hover effects
+- Form inputs with clear labels and validation feedback
+- Modal windows for important actions
+- Toast notifications for user feedback
+- Loading spinners for processing states
+- Consistent button styling across the site
 
-**May 10 2021:** Added `heroku_config` script to allow Heroku API key to be stored as an environment variable.
+### Responsive Design
+The website is fully responsive across all devices:
+- Mobile-first approach
+- Breakpoints at common device sizes
+- Flexible grid system
+- Collapsible navigation menu for mobile
+- Optimized images for different screen sizes
+- Touch-friendly elements for mobile users
 
-**April 7 2021:** Upgraded the template for VS Code instead of Theia.
+### Design Principles
+The design follows key principles to ensure a great user experience:
+- Hierarchy: Clear visual hierarchy to guide users
+- Consistency: Consistent styling throughout
+- Contrast: Good contrast for readability
+- White Space: Appropriate spacing for clean layout
+- Accessibility: WCAG compliance for all users
+- Simplicity: Clean, uncluttered design
 
-**October 21 2020:** Versions of the HTMLHint, Prettier, Bootstrap4 CDN and Auto Close extensions updated. The Python extension needs to stay the same version for now.
+### WireFrames
 
-**October 08 2020:** Additional large Gitpod files (`core.mongo*` and `core.python*`) are now hidden in the Explorer, and have been added to the `.gitignore` by default.
+<img src="static/assets/images/JR-Catering-Wireframes.png" alt="JR Catering WireFrames" width="800"/>
 
-**September 22 2020:** Gitpod occasionally creates large `core.Microsoft` files. These are now hidden in the Explorer. A `.gitignore` file has been created to make sure these files will not be committed, along with other common files.
+## Technologies Used 
+- Frontend:
+  - HTML5
+  - CSS3
+  - JavaScript
+  - Bootstrap 
 
-**April 16 2020:** The template now automatically installs MySQL instead of relying on the Gitpod MySQL image. The message about a Python linter not being installed has been dealt with, and the set-up files are now hidden in the Gitpod file explorer.
+- Backend:
+  - Python
+  - Django
+  - SQLAlchemy
+  - SQLite Database
 
-**April 13 2020:** Added the _Prettier_ code beautifier extension instead of the code formatter built-in to Gitpod.
+- Deployment:
+  - Heroku 
 
-**February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
+## Installation & Setup
+1. Clone the repository
+2. Create a virtual environment
+3. Install the required dependencies
+4. Set up the database
+5. Run the application
 
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
 
-------
+## Libraries and Tools
+- Am I Responsive
+- W3C Validator
+- Font Awesome
+- Google Fonts
+- Git
+- GitHub
+- Heroku
+- Gunicorn
+- Pip
+- Youtube
+- Stack Overflow
+- Google
+- Chat GPT
+- Reddit
+- HTML Validator
+- CSS Validator
+- JSHint
 
-## FAQ about the uptime script
+## Bugs
+### The time slot selection is not working as expected.
+    I got this to work by using a select element instead of an input element.
+### Database not updating
+    I got this to work by adding a function to update the database when the form is submitted with debug statements to check where the error was coming from.
 
-**Why have you added this script?**
 
-It will help us to calculate how many running workspaces there are at any one time, which greatly helps us with cost and capacity planning. It will help us decide on the future direction of our cloud-based IDE strategy.
+## User Stories
 
-**How will this affect me?**
+### First Time Visitor Goals
+1. As a first time visitor, I want to:
+   - Understand the purpose of the website immediately
+   - Navigate the site easily and find important information
+   - View the menu and pricing without needing to register
+   - Find contact information and business hours easily
+   - Access the site on my mobile device
 
-For everyday usage of Gitpod, it doesn’t have any effect at all. The script only captures the following data:
+2. As a potential customer, I want to:
+   - Check availability for specific dates and times
+   - View detailed menu options and prices
+   - Find information about special dietary requirements
+   - See photos of the food and venue
+   - Find location and parking information
+   - Contact the business with questions
 
-- An ID that is randomly generated each time the workspace is started.
-- The current date and time
-- The workspace status of “started” or “running”, which is sent every 5 minutes.
+### Returning Visitor Goals
+1. As a returning visitor, I want to:
+   - Log in to my account easily
+   - View my booking history
+   - Make new bookings quickly
+   - Modify or cancel existing bookings
+   - Save my preferences and contact details
+   - Contact customer service if needed
 
-It is not possible for us or anyone else to trace the random ID back to an individual, and no personal data is being captured. It will not slow down the workspace or affect your work.
+### Business Owner Goals
+1. As the business owner, I want to:
+   - Manage bookings efficiently
+   - Update menu items and prices easily
+   - View booking statistics and reports
+   - Manage user accounts and permissions
+   - Respond to customer inquiries
+   - Update business information and special offers
 
-**So….?**
+### Admin User Goals
+1. As an admin user, I want to:
+   - Access the admin dashboard securely
+   - Manage all user bookings
+   - Handle customer inquiries
+   - Update website content
+   - Monitor system performance
+   - Generate business reports
 
-We want to tell you this so that we are being completely transparent about the data we collect and what we do with it.
+## Deployment
 
-**Can I opt out?**
+### Heroku Deployment
+The site was deployed to Heroku. The steps to deploy are as follows:
 
-Yes, you can. Since no personally identifiable information is being captured, we'd appreciate it if you let the script run; however if you are unhappy with the idea, simply run the following commands from the terminal window after creating the workspace, and this will remove the uptime script:
+1. Create a new Heroku app:
+   - Log in to Heroku
+   - Click "New" from the dashboard
+   - Select "Create new app"
+   - Enter a unique app name
+   - Choose your region (EU or USA)
+   - Click "Create app"
 
-```
-pkill uptime.sh
-rm .vscode/uptime.sh
-```
+2. Set up environment variables:
+   - From your app dashboard, click on "Settings"
+   - Click "Reveal Config Vars"
+   - Add the following config vars:
+     - `SECRET_KEY`: Your secret key
+     - `DATABASE_URL`: Your database URL
+     - `CLOUDINARY_URL`: Your Cloudinary URL (if using Cloudinary)
+     - `PORT`: 8000
 
-**Anything more?**
+3. Prepare the application:
+   - In your GitHub repository, create a `requirements.txt`:
+     ```
+     pip freeze > requirements.txt
+     ```
+   - Create a `Procfile` in the root directory:
+     ```
+     web: gunicorn app:app
+     ```
 
-Yes! We'd strongly encourage you to look at the source code of the `uptime.sh` file so that you know what it's doing. As future software developers, it will be great practice to see how these shell scripts work.
+4. Connect to GitHub:
+   - Go to the "Deploy" tab in your Heroku dashboard
+   - Select "GitHub" as the deployment method
+   - Connect to your GitHub repository
+   - Choose the branch you want to deploy
 
----
+5. Deploy:
+   - Choose "Enable Automatic Deploys" for automatic deployment when you push to GitHub
+   - Click "Deploy Branch" for manual deployment
 
-Happy coding!
+
+
+## Usage
+### User Features
+- Register for an account or log in
+- Navigate to the booking section to make a reservation
+- View and manage your bookings in the bookings dashboard
+- Use the contact form for inquiries
+- Browse the menu and services offered
+
+### Admin Features
+- View all user bookings and manage them
+- Update menu items and availability
+- Handle user inquiries
+- View booking statistics
+
+## Testing
+### Manual Testing
+- User Authentication
+- Registration
+- Login
+- Password Reset
+- Booking System
+- Creating Bookings
+- Editing Bookings
+- Cancelling Bookings
+- Contact Form
+- Responsive Design
+- Admin Functions
+
+
+## Manual Testing
+
+Manual testing was conducted to ensure that all features of the JR Catering Website function as expected. Below are the details of the tests performed:
+
+### User Authentication
+- **Registration Form**: Tested by creating new user accounts with valid and invalid data to ensure proper validation and error handling.
+- **Login Form**: Tested with correct and incorrect credentials to verify authentication and error messages.
+- **Password Reset**: Verified the password reset process, including email notifications and form validation.
+
+### Booking System
+- **Create Booking**: Tested the booking form by entering valid and invalid data, ensuring that bookings are created and stored correctly.
+- **Edit Booking**: Verified that existing bookings can be edited, with changes saved and reflected in the booking history.
+- **Cancel Booking**: Tested the cancellation process to ensure bookings are removed from the system and the user is notified.
+
+### Contact Form
+- **Form Submission**: Tested the contact form with valid and invalid inputs to ensure messages are sent and error messages are displayed when necessary.
+- **Email Integration**: Verified that emails are sent to the correct address upon form submission.
+
+### Menu Page
+- **Navigation**: Ensured that all menu items are displayed correctly and that navigation between categories is smooth.
+- **Special Dietary Indicators**: Checked that indicators for vegetarian, vegan, and gluten-free options are displayed correctly.
+
+### Responsive Design
+- **Mobile and Desktop Views**: Tested the website on various devices and screen sizes to ensure a responsive design and proper layout.
+- **Navigation Menu**: Verified that the navigation menu is accessible and functional on all devices.
+
+### Admin Functions
+- **Booking Management**: Tested the admin dashboard for viewing, editing, and deleting user bookings.
+- **User Management**: Verified that admin can manage user accounts, including viewing and editing user details.
+- **Menu Updates**: Ensured that menu items can be updated and changes are reflected on the user-facing menu page.
+
+### General UI/UX
+- **Button Functionality**: Tested all buttons to ensure they perform the expected actions, such as submitting forms, navigating pages, and opening modals.
+- **Form Validation**: Verified that all forms have appropriate validation and error messages for required fields and incorrect inputs.
+- **Feedback Messages**: Checked that users receive appropriate feedback messages for actions like booking creation, cancellation, and form submissions.
+
+These tests were conducted to ensure a smooth and error-free user experience across all features of the JR Catering Website.
+
+
+### CSS
+- W3C Validator
+
+<img src="static/readme-images/jr-catering-css.png" alt="JR Catering CSS" width="800"/>
+
+## Future Features
+- Online payment integration
+- SMS notifications
+- Table layout visualization
+- Customer review system
+
+## Credits
+- Code Institute
