@@ -394,7 +394,7 @@ These tests were conducted to ensure a smooth and error-free user experience acr
 ### CSS
 - W3C Validator
 
-<img src="static/readme-images/jr-catering-css.png" alt="JR Catering CSS" width="800"/>
+<img src="static/assets/images/jr-catering-css.png" alt="JR Catering CSS" width="800"/>
 
 ## Future Features
 - Online payment integration
